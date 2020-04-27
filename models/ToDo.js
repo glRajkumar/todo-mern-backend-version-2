@@ -1,7 +1,7 @@
 let mongoose = require('mongoose')
 let User = require('./User')
 
-let ToDo =mongoose.model('ToDo', new mongoose.Schema({
+let ToDoSchema = new mongoose.Schema({
     title: String,
     description: String,
     createDateTime: Date,
@@ -11,6 +11,7 @@ let ToDo =mongoose.model('ToDo', new mongoose.Schema({
     },
     done: Boolean
 },{timestamps: true})
-)
+
+let ToDo =mongoose.model('ToDo', ToDoSchema)
 
 module.exports =ToDo

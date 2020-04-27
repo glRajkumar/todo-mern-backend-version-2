@@ -5,6 +5,7 @@ let uri = "mongodb+srv://RajDB:glrajv12@rajcluster1-oxvx4.mongodb.net/test?retry
 mongoose.connect(uri, {
     useUnifiedTopology : true,
     useNewUrlParser : true,
+    useCreateIndex : true,
     useFindAndModify : false
 })
 .then(()=>{
