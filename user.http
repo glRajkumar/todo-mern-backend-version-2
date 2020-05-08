@@ -1,0 +1,88 @@
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZWI1MmUyMjRjZDEwZjA5OTA4NGJhYjkiLCJpYXQiOjE1ODg5Mzk1MDYsImV4cCI6MTU4OTAwNDMwNn0.4Hmz2f1xEl8kF1E8I4iFEsSAR8-WFysRigbPOCXLZuM
+@host = http://localhost:8000/
+
+
+### get 
+GET {{host}}
+
+### get user profile
+GET {{host}}user/me
+Authorization: {{token}}
+
+### user register
+POST {{host}}user/register
+Content-Type: application/json
+
+{
+    "name":"nnjk",
+    "email":"pbg@hhdc.mjk",
+    "password": "jjjmjuyh"
+}
+
+### user login
+POST {{host}}user/login
+Content-Type: application/json
+
+{
+    "email":"jhh@hhdc.mjk",
+    "password": "mjuyh"
+}
+
+
+### user logout
+POST {{host}}user/logout
+Content-Type: application/json
+Authorization: {{token}}
+
+GET {{host}}/todo
+Content-Type: application/json
+Authorization: {{token}}
+
+### todo edit 
+GET {{host}}/todo/findbyid/5eb5386d78728b15809020e4
+Content-Type: application/json
+Authorization: {{token}}
+
+### todo finished
+GET {{host}}/todo/finished
+Content-Type: application/json
+Authorization: {{token}}
+
+### todo post for creating todo
+POST {{host}}/todo
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+    "title":"aaaaaa aaaaaa ssssss bgtrf stt",
+    "description":"gtfrsth  yggugugu ihiiihi ihhuhh"
+}
+
+### todo put for update
+PUT {{host}}/todo
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+    "id":"5eb5386d78728b15809020e4",
+    "title":"hytgfred",
+    "description":"hhhhhhhhhh"
+}
+
+### todo archived
+PUT {{host}}/todo/archive
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+    "id":"5eb52f40f3452a1738b876d4"
+}
+
+### todo delete
+DELETE {{host}}/todo
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+    "id":"5eb5386d78728b15809020e4"
+}
