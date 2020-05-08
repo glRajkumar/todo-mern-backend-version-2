@@ -10,14 +10,13 @@ let User = mongoose.model('User',{
     email : { 
          type : String,
          required : [true, "Email is required"],
-         unique : [true, "Email should unique"], 
+         unique : true, 
          match : [/\S+@\S+\.\S+/, "Email is not valid"]  
         },
 
     password : {
          type : String,
-         required : [true, "Password is required"] , 
-         minlength : [8, "Pass should atleast 8 letter"]
+         required : [true, "Password is required"]
         },
 
     token : [{ type : String }]

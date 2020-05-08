@@ -3,66 +3,79 @@ let router = express.Router()
 let ToDo = require('../models/ToDo')
 let auth = require('../middlewares/auth')
 
-router.get('/', auth, (req, res)=>{
+router.get('/', auth, async (req, res)=>{
     let userId = req.user._id
-
-    ToDo.find({"creator": userId, done:false})
-    .then((todos)=>{res.send(todos)})
-    .catch((err)=>{res.status(400).send(err)})
+    try {
+       let todos = await ToDo.find({"creator": userId, done:false})
+       res.send(todos) 
+    } catch (error) {
+        res.status(400).send(error)
+    }
 })
 
-router.get('/editid/:id', auth, (req, res)=>{
+router.get('/findbyid/:id', auth, async (req, res)=>{
     let userId = req.user._id
     let id = req.params.id
 
-    ToDo.find({"creator": userId, "_id": id})
-    .then((todo)=>{res.send(todo)})
-    .catch((err)=>{res.status(400).send(err)})
+    try {
+        let todo = await ToDo.find({"creator": userId, "_id": id})
+        res.send(todo) 
+    } catch (error) {
+         res.status(400).send(error)
+    }
 })
 
-router.get('/finished', auth, (req, res)=>{
+router.get('/finished', auth, async (req, res)=>{
     let userId = req.user._id
-
-    ToDo.find({"creator": userId, done:true})
-    .then((todos)=>{res.send(todos)})
-    .catch((err)=>{res.status(400).send(err)})
+    try {
+        let todos = await ToDo.find({"creator": userId, done:true})
+        res.send(todos) 
+    } catch (error) {
+         res.status(400).send(error)
+    }
 })
 
-router.post('/', auth, (req, res)=>{
+router.post('/', auth, async (req, res)=>{
     let {title, description} = req.body
     let creator = req.user._id
-    let createDateTime = new Date()
     let done = false
-    
-    let todo = new ToDo({title, description, creator, createDateTime, done})
-
-    todo.save().then(()=>{
+    try {
+        let todo = new ToDo({title, description, creator, done})
+        await todo.save()
         res.send("ToDo is added Successfully")
-    })
-    .catch((error)=>{
-       res.status(400).send(err)
-    })
+     } catch (error) {
+         res.status(400).send(error)
+     }
 })
 
-router.put('/', auth, (req, res)=>{
+router.put('/', auth, async (req, res)=>{
     let {id,title, description} = req.body
-    ToDo.findOneAndUpdate({"_id": id}, {title, description, createDateTime:new Date()})
-    .then(()=>{res.send("ToDo is Updated")})
-    .catch((err)=>{res.status(400).send(err)}) 
+    try {
+        await ToDo.findOneAndUpdate({"_id": id}, {title, description})
+        res.send("ToDo is Updated") 
+     } catch (error) {
+         res.status(400).send(error)
+     }
 })
 
-router.put('/archive', auth, (req, res)=>{
+router.put('/archive', auth, async (req, res)=>{
     let {id} = req.body
-    ToDo.findOneAndUpdate({"_id": id}, {done: true})
-    .then(()=>{res.send("ToDo is Archived")})
-    .catch((err)=>{res.status(400).send(err)}) 
+    try {
+        await ToDo.findOneAndUpdate({"_id": id}, {done: true})
+        res.send("ToDo is Archived")
+    } catch (error) {
+         res.status(400).send(error)
+    }
 })
 
-router.delete('/', auth, (req, res)=>{
+router.delete('/', auth, async (req, res)=>{
     let {id} = req.body
-    ToDo.findByIdAndDelete({"_id": id})
-    .then(()=>{res.send("ToDo is deleted")})
-    .catch((err)=>{res.status(400).send(err)}) 
+    try {
+        await ToDo.findByIdAndDelete({"_id": id})
+        res.send("ToDo is deleted") 
+     } catch (error) {
+         res.status(400).send(error)
+     }
 })
 
 module.exports = router

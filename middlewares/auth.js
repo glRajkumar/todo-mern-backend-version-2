@@ -1,27 +1,25 @@
 let jwt = require('jsonwebtoken')
 let User = require('../models/User')
+require('dotenv').config()
 
-function auth(req, res, next){
+async function auth(req, res, next){
     try{
         let token = req.headers.authorization.replace('Bearer ', '')
-        let payload = jwt.verify(token, "secret")
+        let payload = jwt.verify(token, process.env.jwtSecretKey)
         let userId = payload.userId
 
-        User.findById(userId).then((user)=>{
-            let token = user.token
-            let tokenIndex = token.indexOf(token) 
-            if( tokenIndex > -1){
-                req.user = user
-                req.token = token
-                
-                next()
-            }else{
-                res.status(401).send("Issue with token")
-            }
-        })
-        .catch(()=>{
-            res.status(400).send("User was not found")
-        })
+        let user = await User.findById(userId)
+        let tokenIndex = user.token.indexOf(token)
+        if(!user) res.status(400).send("User was not found")
+
+        if( tokenIndex > -1){
+            req.user = user
+            req.token = token
+            
+            next()
+        }else{
+            res.status(401).send("Issue with token")
+        }
     }
     catch(error){
         res.status(401).send("Auth token invalid")

@@ -1,8 +1,9 @@
 /node_modules
 /build
 
-dev.js
+.env
 test.http
+todo.http
 .DS_Store
 
 npm-debug.log*

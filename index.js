@@ -1,22 +1,22 @@
-let express = require('express')
-let app = express()
-let cors = require('cors')
+const express = require('express')
+const cors = require('cors')
+const connectDB = require('./db')
+require('dotenv').config()
 
-let db = require('./db')
+const app = express()
+connectDB()
 
 app.use(cors())
 app.use(express.urlencoded({extended: false}))
 app.use(express.json())
 
-let userControllers = require('./controllers/userControllers')
-let todoControllers = require('./controllers/todoControllers')
+const userControllers = require('./controllers/userControllers')
+const todoControllers = require('./controllers/todoControllers')
 
 app.use("/user", userControllers)
 app.use("/todo", todoControllers)
 
-app.get("/",(req,res) => {
-    res.send("Hello World!")
-})
+app.get("/", (req,res) => res.send("Hello World!") )
 
 app.use((req,res,next)=>{
     const error = new Error('Not Found')
@@ -33,5 +33,5 @@ app.use((error, req, res, next)=>{
     })
 })
 
-const port = process.env.PORT || 8000
+const port = process.env.PORT
 app.listen(port,()=>console.log(`App is running on ${port}`))
